@@ -1,0 +1,5 @@
+mysql/*
+!mysql/.keep
+wp/*
+!wp/.keep
+.env

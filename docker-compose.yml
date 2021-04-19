@@ -1,0 +1,47 @@
+version: '3.1'
+services: 
+    db:
+        image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment: 
+            MYSQL_RANDOM_ROOT_PASSWORD: '1'
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        volumes: 
+            - ./mysql:/var/lib/mysql
+        networks: 
+            - default_network
+    phpmyadmin:
+        image: phpmyadmin:latest
+        restart: always
+        depends_on: 
+            - db
+        ports: 
+            - 8080:80
+        environment: 
+            PMA_ARBITRARY: 1
+        networks: 
+            - default_network
+    wordpress:
+        image: wordpress:latest
+        restart: always
+        depends_on: 
+            - db
+            - phpmyadmin
+        environment:
+            WORDPRESS_DB_HOST: db
+            WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+            WORDPRESS_DB_USER: ${MYSQL_USER}
+            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+        volumes: 
+            - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./wp:/var/www/html
+        networks: 
+            - default_network
+        ports:
+            - 80:80
+networks: 
+    default_network:
+        name: default_network
