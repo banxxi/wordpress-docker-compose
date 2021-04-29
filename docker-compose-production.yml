@@ -30,7 +30,7 @@ services:
         networks: 
             - default_network
         ports:
-            - 8081:80
+            - ${WP_PORT}:80
 networks: 
     default_network:
         name: default_network
