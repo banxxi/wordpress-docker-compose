@@ -18,7 +18,6 @@ services:
         restart: always
         depends_on: 
             - db
-            - phpmyadmin
         environment:
             WORDPRESS_DB_HOST: db
             WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
